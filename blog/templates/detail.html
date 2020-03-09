@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <h4 class="col-8 mt-4 mb-4">{{ post.content }}</h3>
+        {% for co in comment%}
+        <div class="card mb-2">
+            <div class="card-body">
+              <p class="card-text">{{ co.content }}</p>
+              <p class="card-text text-right"><small class="text-muted">by: {{ co.user_id.username }} time: {{ co.create_time|date:'d/m/Y H:m' }}</small></p>
+            </div>
+        </div>
+        {% endfor %}
+            <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-row mt-4">
+                <div class="col-10">
+                    <input type="text" class="form-control" placeholder="Add comment" name="content" required>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary ml-3">Comment</button>
+                </div>
+            </div>
+            </form>
+    </div>
+{% endblock content %}
+

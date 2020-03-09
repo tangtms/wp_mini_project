@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mt-4 md-4">Welcome to Blog</h1>
+        <form class="form-inline justify-content-center mt-4" method="GET" action="{% url 'index' %}">
+            <div class="form-group">
+                <input type="text" class="form-control ml-3" id="inputSearch" 
+                    name="inputSearch" placeholder="Search" value="{{search_txt}}">
+            </div>
+            <button type="submit" class="btn btn-primary ml-3">Submit</button>
+        </form>
+        <div class="row mt-4">
+            {% for po in post%}
+            <div class="col-3 p-3 border">
+                <h3>{{ po.title }}</h3>
+                <p>{{ po.content }}</p>
+                <a href="{% url 'post_detail' post_id=po.id %}">
+                    <div class="btn btn-warning">Read more</div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="col-12 text-center">
+            <a href="{% url 'post_add' %}">
+                <button class="btn btn-primary mt-4 mb-4">New Blog</button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block footer %}
+    Footer of index page!!!
+{% endblock %}
