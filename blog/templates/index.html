@@ -10,15 +10,19 @@
             <button type="submit" class="btn btn-primary ml-3">Submit</button>
         </form>
         <div class="row mt-4">
-            {% for po in post%}
-            <div class="col-3 p-3 border">
-                <h3>{{ po.title }}</h3>
-                <p>{{ po.content }}</p>
-                <a href="{% url 'post_detail' post_id=po.id %}">
-                    <div class="btn btn-warning">Read more</div>
-                </a>
+        {% for po in post %}
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ po.title }}</h5>
+                    <p class="card-text text-muted"><small>by {{ po.user_id }}</small>
+                    <p class="card-text">{{ po.content }}</p>
+                    <a href="{% url 'post_detail' post_id=po.id %}" class="btn btn-warning">Read more</a>
+                </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
+            
         </div>
         {% if perms.management.add_post %}
         <div class="col-12 text-center">
@@ -29,8 +33,4 @@
         {% endif %}
         
     </div>
-{% endblock %}
-
-{% block footer %}
-    Footer of index page!!!
 {% endblock %}

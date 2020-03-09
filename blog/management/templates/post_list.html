@@ -4,7 +4,8 @@
         <h1>My Blog</h1>
         {% for po in post%}
             <div class="m-3 p-3 border">
-                <h3>{{ po.title }}</h3><br/>
+                <h3>{{ po.title }}</h3>
+                <p class="text-muted"><small>by {{ po.user_id }} {{ po.update_time|date:'d/m/Y H:i' }}</p></small>
                 <p>{{ po.content }}</p>
                 <a href="{% url 'post_detail' post_id=po.id %}">
                     <div class="btn btn-warning" id="{{po.id}}">Read more</div>
@@ -22,8 +23,4 @@
             </div>
         {% endfor %}
     </div>
-{% endblock %}
-
-{% block footer %}
-    Footer of classroom list page!!!
 {% endblock %}
