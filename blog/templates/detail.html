@@ -8,6 +8,12 @@
             <div class="card-body">
               <p class="card-text">{{ co.content }}</p>
               <p class="card-text text-right"><small class="text-muted">by: {{ co.user_id.username }} time: {{ co.create_time|date:'d/m/Y H:m' }}</small></p>
+              {% if user == co.user_id %}
+                <a href="{% url 'comment_delete' comment_id=co.id %}">
+                    <div class="btn btn-danger btn-sm">Delete comment</div>
+                </a>
+                {% endif %}
+              <!-- <a href="{% url 'comment_delete' comment_id=co.id %}" class="card-link text-right">Delete comment</a> -->
             </div>
         </div>
         {% endfor %}

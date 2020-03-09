@@ -8,7 +8,7 @@ from management.models import Post, Comment
 # Create your views here.
 
 def my_login(request):
-    context = {}
+    context = {} 
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -54,7 +54,7 @@ def register(request):
             context['error'] = 'Wrong username or password!'
         else:
             user = User.objects.create_user(username, '', password)
-            return redirect('llogin')
+            return redirect('login')
 
     return render(request, template_name='register.html', context=context)
 
@@ -63,7 +63,8 @@ def index(request):
     print(search_txt)
 
     post = Post.objects.filter(
-        title__icontains=search_txt
+        title__icontains=search_txt,
+        status=1
     )
 
     return render(request, template_name='index.html', context={

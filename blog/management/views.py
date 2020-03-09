@@ -13,7 +13,8 @@ def post_add(request):
         post = Post.objects.create(
             title=request.POST.get('title'),
             content=request.POST.get('content'),
-            user_id=current_user
+            user_id=current_user,
+            status=True
         )
     else:
         post = Post.objects.none()
@@ -47,6 +48,22 @@ def post_list(request):
     return render(request, template_name='post_list.html', context={
         'post': post
     })
+
+@login_required
+def comment_delete(request, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    cur_post = comment.post_id.id
+
+    comment.delete()
+
+    return redirect('post_detail', post_id=cur_post)
+
+def post_hide(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    post.status = False
+    post.save()
+
+    return redirect('post_list')
 
 def detail(request, post_id):
     current_user = request.user
