@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from management.models import Post, Comment
-# Create your views here.
+
+#login, logout, register, index
 
 def my_login(request):
     context = {} 
@@ -46,14 +47,16 @@ def register(request):
         password = request.POST.get('password')
         password_chk = request.POST.get('password_chk')
 
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists(): #if user already exists
             context['username'] = username
             context['error'] = 'Username already exists'
-        elif password != password_chk:
+        elif password != password_chk: #if password not match
             context['username'] = username
-            context['error'] = 'Wrong username or password!'
+            context['error'] = 'Password not match'
         else:
             user = User.objects.create_user(username, '', password)
+            user_group = Group.objects.get(name='User') #auto add new user to group User
+            user_group.user_set.add(user)
             return redirect('login')
 
     return render(request, template_name='register.html', context=context)
@@ -64,7 +67,7 @@ def index(request):
 
     post = Post.objects.filter(
         title__icontains=search_txt,
-        status=1
+        status=1 #is publish
     )
 
     return render(request, template_name='index.html', context={

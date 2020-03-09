@@ -9,12 +9,12 @@
                 <a href="{% url 'post_detail' post_id=po.id %}">
                     <div class="btn btn-warning" id="{{po.id}}">Read more</div>
                 </a>
-                {% if po.status %}
+                {% if po.status and user == po.user_id %}
                 <a href="{% url 'post_hide' post_id=po.id %}">
                     <div class="btn btn-danger" id="{{po.id}}">Hide post</div>
                 </a>
                 {% endif %}
-                {% if not po.status %}
+                {% if not po.status and user == po.user_id %}
                 <a href="{% url 'post_hide' post_id=po.id %}">
                     <div class="btn btn-primary" id="{{po.id}}">Publish post</div>
                 </a>

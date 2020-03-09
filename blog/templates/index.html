@@ -20,13 +20,14 @@
             </div>
             {% endfor %}
         </div>
-        {% if user.is_authenticated %}
+        {% if perms.management.add_post %}
         <div class="col-12 text-center">
             <a href="{% url 'post_add' %}">
-                <button class="btn btn-primary mt-4 mb-4">New Blog</button>
+                <button class="btn btn-primary mt-4 mb-4">Create New Blog</button>
             </a>
         </div>
         {% endif %}
+        
     </div>
 {% endblock %}
 

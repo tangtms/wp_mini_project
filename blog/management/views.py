@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 
 from management.models import Post, Comment
-# Create your views here.
+
 @login_required
 def post_add(request):
     post = Post.objects.all()
@@ -25,22 +25,25 @@ def post_add(request):
     return render(request, template_name='post_form.html', context=context)
 
 @login_required
-def post_update(request):
-    post = Post.objects.all()
+@permission_required('management.change_post')
+def post_update(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    current_user = request.user
+    if current_user == post.user_id: #backend check if post user = edit user
+        if request.method == 'POST':
+            post.title=request.POST.get('title')
+            post.content=request.POST.get('content')
+            post.save()
+        msg = 'Post updated'
 
-    if request.method == 'POST':
-        post = Post.objects.create(
-            title=request.POST.get('title'),
-            content=request.POST.get('content'),
-        )
-    else:
-        post = Post.objects.none()
+        context = {
+            'post': post,
+            'msg': msg
+        }
+        return render(request, template_name='post_form.html', context=context)
+    return HttpResponseForbidden()
 
-    context = {
-        'post': post,
-    }
-    return render(request, template_name='post_form.html', context=context)
-
+@permission_required('management.change_post')
 @login_required
 def post_list(request):
     post = Post.objects.all()
@@ -58,6 +61,7 @@ def comment_delete(request, comment_id):
 
     return redirect('post_detail', post_id=cur_post)
 
+@login_required
 def post_hide(request, post_id):
     post = Post.objects.get(pk=post_id)
     post.status = False
@@ -76,7 +80,9 @@ def detail(request, post_id):
     
     post = Post.objects.get(pk=post_id)
     comment = Comment.objects.filter(post_id=post_id)
+    comment_cnt = len(comment)
     return render(request, template_name='detail.html', context={
         'post': post,
-        'comment': comment
+        'comment': comment,
+        'comment_cnt': comment_cnt
     })
