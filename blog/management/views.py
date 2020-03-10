@@ -6,9 +6,11 @@ from django.shortcuts import redirect, render
 from management.models import Post, Comment
 
 @login_required
+@permission_required('management.add_post')
 def post_add(request):
     post = Post.objects.all()
     current_user = request.user
+    msg = ''
     if request.method == 'POST':
         post = Post.objects.create(
             title=request.POST.get('title'),
@@ -16,11 +18,13 @@ def post_add(request):
             user_id=current_user,
             status=True
         )
+        msg = 'Successfully create new post'
     else:
         post = Post.objects.none()
 
     context = {
         'post': post,
+        'msg': msg
     }
     return render(request, template_name='post_form.html', context=context)
 
@@ -28,21 +32,23 @@ def post_add(request):
 @permission_required('management.change_post')
 def post_update(request, post_id):
     post = Post.objects.get(pk=post_id)
-    current_user = request.user
-    if current_user == post.user_id: #backend check if post user = edit user
+    msg = ''
+    if request.user == post.user_id: #backend check if post user = edit user
         if request.method == 'POST':
             post.title = request.POST.get('title')
             post.content = request.POST.get('content')
             post.save()
+            msg = 'Post edited'
 
         context = {
             'post': post,
+            'msg': msg
         }
         return render(request, template_name='post_form.html', context=context)
     return HttpResponseForbidden()
 
-@permission_required('management.change_post')
 @login_required
+@permission_required('management.change_post')
 def post_list(request):
     post = Post.objects.all()
 
@@ -59,6 +65,7 @@ def comment_delete(request, comment_id):
 
     return redirect('post_detail', post_id=cur_post)
 
+@login_required
 def comment_edit(request, comment_id):
     comment = Comment.objects.get(pk=comment_id)
     cur_post = comment.post_id.id
@@ -73,8 +80,8 @@ def comment_edit(request, comment_id):
     return render(request, template_name='comment_edit.html', context=context)
 
 
-
 @login_required
+@permission_required('management.change_post')
 def post_hide(request, post_id):
     post = Post.objects.get(pk=post_id)
     post.status = False
@@ -83,6 +90,7 @@ def post_hide(request, post_id):
     return redirect('post_list')
 
 @login_required
+@permission_required('management.change_post')
 def post_show(request, post_id):
     post = Post.objects.get(pk=post_id)
     post.status = True

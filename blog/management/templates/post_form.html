@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="container mt-4">
+        {% if msg %}<p class="text-success">{{msg}}</p>{% endif %}
         {% if post.id %}
             <h1>Edit Post</h1>
             <form method="POST" action="{% url 'post_update' post_id=post.id %}">
