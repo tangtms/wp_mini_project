@@ -34,11 +34,9 @@ def post_update(request, post_id):
             post.title=request.POST.get('title')
             post.content=request.POST.get('content')
             post.save()
-        msg = 'Post updated'
 
         context = {
             'post': post,
-            'msg': msg
         }
         return render(request, template_name='post_form.html', context=context)
     return HttpResponseForbidden()
@@ -60,6 +58,21 @@ def comment_delete(request, comment_id):
     comment.delete()
 
     return redirect('post_detail', post_id=cur_post)
+
+def comment_edit(request, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    cur_post = comment.post_id.id
+    if request.method == 'POST':
+        comment.content=request.POST.get('content')
+        comment.save()
+        return redirect('post_detail', post_id=cur_post)
+    
+    context = {
+            'comment': comment,
+        }
+    return render(request, template_name='comment_edit.html', context=context)
+
+
 
 @login_required
 def post_hide(request, post_id):

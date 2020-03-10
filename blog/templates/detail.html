@@ -23,11 +23,16 @@
         
         <div class="card mb-2">
             <div class="card-body">
-              <p class="card-text">{{ co.content }}</p>
-              <p class="card-text text-right"><small class="text-muted">by: {{ co.user_id.username }} time: {{ co.create_time|date:'d/m/Y H:i' }}</small></p>
-              {% if user == co.user_id or user == co.post_id.user_id %}
+                <p class="card-text">{{ co.content }}</p>
+                <p class="card-text text-right"><small class="text-muted">by: {{ co.user_id.username }} time: {{ co.create_time|date:'d/m/Y H:i' }}</small></p>
+                {% if user == co.user_id or user == co.post_id.user_id %}
                 <a href="{% url 'comment_delete' comment_id=co.id %}">
-                    <div class="btn btn-danger btn-sm">Delete comment</div>
+                    <div class="btn btn-danger btn-sm">Delete</div>
+                </a>
+                {% endif %}
+                {% if user == co.user_id %}
+                <a href="{% url 'comment_edit' comment_id=co.id %}">
+                    <div class="btn btn-light btn-sm">Edit</div>
                 </a>
                 {% endif %}
             </div>

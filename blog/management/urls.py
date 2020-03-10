@@ -7,5 +7,7 @@ urlpatterns = [
     path('post/all/', views.post_list, name='post_list'),
     path('detail/<int:post_id>/', views.detail, name='post_detail'),
     path('post/comment_delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
+    path('post/comment_edit/<int:comment_id>/', views.comment_edit, name='comment_edit'),
     path('post/hide/<int:post_id>/', views.post_hide, name='post_hide')
+    
 ]
