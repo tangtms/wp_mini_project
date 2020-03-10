@@ -38,6 +38,7 @@
             </div>
         </div>
         {% endfor %}
+            {% if user.is_authenticated %}
             <form method="POST" action="">
             {% csrf_token %}
             <div class="form-row mt-4">
@@ -49,6 +50,7 @@
                 </div>
             </div>
             </form>
+            {% endif %}
     </div>
 {% endblock content %}
 
