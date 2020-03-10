@@ -31,8 +31,8 @@ def post_update(request, post_id):
     current_user = request.user
     if current_user == post.user_id: #backend check if post user = edit user
         if request.method == 'POST':
-            post.title=request.POST.get('title')
-            post.content=request.POST.get('content')
+            post.title = request.POST.get('title')
+            post.content = request.POST.get('content')
             post.save()
 
         context = {
