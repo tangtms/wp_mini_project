@@ -82,6 +82,15 @@ def post_hide(request, post_id):
 
     return redirect('post_list')
 
+@login_required
+def post_show(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    post.status = True
+    post.save()
+
+    return redirect('post_list')
+
+
 def detail(request, post_id):
     current_user = request.user
     if request.method == 'POST':
